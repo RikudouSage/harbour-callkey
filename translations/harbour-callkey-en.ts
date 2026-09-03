@@ -3,13 +3,9 @@
 <TS version="2.1" language="en_GB">
 <context>
     <name></name>
-    <message id="settings">
-        <location filename="../qml/pages/MainPage.qml" line="16"/>
-        <source>Settings</source>
-        <translation>Settings</translation>
-    </message>
     <message id="accounts">
         <location filename="../qml/pages/ConfigPage.qml" line="100"/>
+        <location filename="../qml/pages/MainPage.qml" line="65"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
@@ -48,13 +44,14 @@
         <source>Cover settings</source>
         <translation>Cover settings</translation>
     </message>
-    <message id="account.cover_icon">
-        <location filename="../qml/pages/AccountEditPage.qml" line="304"/>
-        <source>Cover icon</source>
-        <translation>Cover icon</translation>
+    <message id="account.icon">
+        <location filename="../qml/pages/AccountEditPage.qml" line="274"/>
+        <location filename="../qml/pages/AccountEditPage.qml" line="305"/>
+        <source>Action icon</source>
+        <translation>Action icon</translation>
     </message>
-    <message id="account.cover_icon_none">
-        <location filename="../qml/pages/AccountEditPage.qml" line="314"/>
+    <message id="account.icon_none">
+        <location filename="../qml/pages/AccountEditPage.qml" line="315"/>
         <source>No icon selected</source>
         <translation>No icon selected</translation>
     </message>
@@ -179,13 +176,25 @@
         <translation>Search icons</translation>
     </message>
     <message id="main.no_accounts">
-        <location filename="../qml/pages/MainPage.qml" line="38"/>
-        <source>There are no actions configured. Please use the pull down menu to configure actions.</source>
-        <translation>There are no actions configured. Please use the pull down menu to configure actions.</translation>
+        <location filename="../qml/pages/MainPage.qml" line="92"/>
+        <source>There are no actions configured. Pull down to add one.</source>
+        <translation>There are no actions configured. Pull down to add one.</translation>
+    </message>
+    <message id="main.available_cover">
+        <location filename="../qml/pages/MainPage.qml" line="213"/>
+        <source>Available on cover</source>
+        <translation>Available on cover</translation>
+    </message>
+    <message id="main.action_failed">
+        <location filename="../qml/pages/MainPage.qml" line="124"/>
+        <source></source>
+        <oldsource>Action failed</oldsource>
+        <translation type="unfinished">Action failed</translation>
     </message>
     <message id="app_name">
         <location filename="../qml/cover/CoverPage.qml" line="147"/>
-        <location filename="../qml/pages/MainPage.qml" line="30"/>
+        <location filename="../qml/pages/MainPage.qml" line="76"/>
+        <location filename="../qml/pages/MainPage.qml" line="187"/>
         <source>CallKey</source>
         <oldsource>Call Key</oldsource>
         <extracomment>The name of the application, you might not need to translate this, but it&apos;s up to you</extracomment>

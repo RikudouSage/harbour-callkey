@@ -264,58 +264,58 @@ Dialog {
                                 : qsTrId("account.cover_action_limit_description")
                             onCheckedChanged: {
                                 page.setAccountValue("coverAction", checked)
-                                if (!checked) {
-                                    page.setAccountValue("coverIcon", "")
-                                }
                             }
                         }
+                    }
+                }
 
-                        BackgroundItem {
-                            id: coverIconItem
+                ExpandingSection {
+                    //% "Action icon"
+                    title: qsTrId("account.icon")
 
-                            width: parent.width
-                            height: Theme.itemSizeMedium
-                            enabled: coverAction.enabled && coverAction.checked
-                            opacity: enabled ? 1.0 : Theme.opacityLow
-                            onClicked: page.openIconSelector()
+                    content.sourceComponent: BackgroundItem {
+                        id: iconItem
 
-                            Icon {
-                                id: coverIconPreview
+                        width: parent.width
+                        height: Theme.itemSizeMedium
+                        onClicked: page.openIconSelector()
 
-                                visible: page.hasCoverIcon()
-                                source: page.coverIconSource()
-                                anchors.left: parent.left
-                                anchors.leftMargin: Theme.horizontalPageMargin
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: Theme.iconSizeMedium
-                                height: Theme.iconSizeMedium
+                        Icon {
+                            id: iconPreview
+
+                            visible: page.hasCoverIcon()
+                            source: page.coverIconSource()
+                            anchors.left: parent.left
+                            anchors.leftMargin: Theme.horizontalPageMargin
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: Theme.iconSizeMedium
+                            height: Theme.iconSizeMedium
+                        }
+
+                        Column {
+                            anchors.left: iconPreview.visible ? iconPreview.right : parent.left
+                            anchors.leftMargin: iconPreview.visible ? Theme.paddingMedium : Theme.horizontalPageMargin
+                            anchors.right: parent.right
+                            anchors.rightMargin: Theme.horizontalPageMargin
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Label {
+                                width: parent.width
+                                //% "Action icon"
+                                text: qsTrId("account.icon")
+                                color: iconItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                                truncationMode: TruncationMode.Fade
                             }
 
-                            Column {
-                                anchors.left: coverIconPreview.visible ? coverIconPreview.right : parent.left
-                                anchors.leftMargin: coverIconPreview.visible ? Theme.paddingMedium : Theme.horizontalPageMargin
-                                anchors.right: parent.right
-                                anchors.rightMargin: Theme.horizontalPageMargin
-                                anchors.verticalCenter: parent.verticalCenter
-
-                                Label {
-                                    width: parent.width
-                                    //% "Cover icon"
-                                    text: qsTrId("account.cover_icon")
-                                    color: coverIconItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                                    truncationMode: TruncationMode.Fade
-                                }
-
-                                Label {
-                                    width: parent.width
-                                    text: page.hasCoverIcon()
-                                          ? page.coverIcon()
-                                          //% "No icon selected"
-                                          : qsTrId("account.cover_icon_none")
-                                    color: coverIconItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    truncationMode: TruncationMode.Fade
-                                }
+                            Label {
+                                width: parent.width
+                                text: page.hasCoverIcon()
+                                      ? page.coverIcon()
+                                      //% "No icon selected"
+                                      : qsTrId("account.icon_none")
+                                color: iconItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                                font.pixelSize: Theme.fontSizeSmall
+                                truncationMode: TruncationMode.Fade
                             }
                         }
                     }

@@ -9,10 +9,6 @@
         <extracomment>The name of the application, you might not need to translate this, but it&apos;s up to you</extracomment>
         <translation type="unfinished"></translation>
     </message>
-    <message id="settings">
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message id="accounts">
         <source>Actions</source>
         <translation type="unfinished"></translation>
@@ -45,11 +41,11 @@
         <source>Cover settings</source>
         <translation type="unfinished"></translation>
     </message>
-    <message id="account.cover_icon">
-        <source>Cover icon</source>
+    <message id="account.icon">
+        <source>Action icon</source>
         <translation type="unfinished"></translation>
     </message>
-    <message id="account.cover_icon_none">
+    <message id="account.icon_none">
         <source>No icon selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -150,7 +146,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main.no_accounts">
-        <source>There are no actions configured. Please use the pull down menu to configure actions.</source>
+        <source>There are no actions configured. Pull down to add one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="main.available_cover">
+        <source>Available on cover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="main.action_failed">
+        <source></source>
+        <oldsource>Action failed</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
