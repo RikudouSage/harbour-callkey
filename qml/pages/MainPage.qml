@@ -25,6 +25,7 @@ Page {
         caller.nat = account.nat !== false
         caller.target = account.target || ""
         caller.timeoutMs = account.timeoutMs || 0
+        caller.ignoreTargetDeclineErrors = account.ignoreTargetDeclineErrors !== false
     }
 
     function callAccount(index) {

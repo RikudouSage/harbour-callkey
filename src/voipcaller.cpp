@@ -1,8 +1,10 @@
 #include "voipcaller.h"
 
-#include "voip/libvoipringer.h"
 #include <QtConcurrent>
 #include <QDebug>
+
+#include "voip/libvoipringer.h"
+#include "defer.h"
 
 VoipCaller::VoipCaller(SecretsHandler *secrets, QObject *parent) : QObject(parent), secrets(secrets)
 {
@@ -38,11 +40,20 @@ void VoipCaller::placeCall()
         };
 
         char *error = nullptr;
-        if (PlaceCall(&options, &error) != CallResultSuccess) {
+        auto result = PlaceCall(&options, &error);
+        if (result != CallResultSuccess) {
+            defer({
+                std::free(error);
+            });
+
+            if (ignoreTargetDeclineErrors && result == CallResultDeclined) {
+                emit callSucceeded();
+                return;
+            }
+
             const auto errorMessage = QString::fromUtf8(error);
             emit callFailed(errorMessage);
             qWarning() << "Error placing a call: " << errorMessage;
-            std::free(error);
         } else {
             emit callSucceeded();
         }

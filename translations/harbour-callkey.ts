@@ -117,6 +117,14 @@
         <source>Enabled by default.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="account.ignore_target_decline_errors">
+        <source>Ignore target decline errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.ignore_target_decline_errors_description">
+        <source>Busy or declined status codes will not be reported as errors.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message id="account.timeout">
         <source>Timeout</source>
         <translation type="unfinished"></translation>

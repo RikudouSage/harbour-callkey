@@ -20,6 +20,7 @@ Dialog {
             setAccountValue("sipServerPort", 5060)
             setAccountValue("sipTransport", "udp")
             setAccountValue("nat", true)
+            setAccountValue("ignoreTargetDeclineErrors", true)
         } else {
             loadPassword()
         }
@@ -387,6 +388,17 @@ Dialog {
                             //% "Enabled by default."
                             description: qsTrId("account.nat_description")
                             onCheckedChanged: page.setAccountValue("nat", checked)
+                        }
+
+                        TextSwitch {
+                            id: ignoreTargetDeclineErrors
+                            width: parent.width
+                            checked: page.updatedAccount.ignoreTargetDeclineErrors !== false
+                            //% "Ignore target decline errors"
+                            text: qsTrId("account.ignore_target_decline_errors")
+                            //% "Busy or declined status codes will not be reported as errors."
+                            description: qsTrId("account.ignore_target_decline_errors_description")
+                            onCheckedChanged: page.setAccountValue("ignoreTargetDeclineErrors", checked)
                         }
 
                         TextField {

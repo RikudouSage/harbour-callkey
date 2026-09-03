@@ -19,6 +19,7 @@ class VoipCaller : public QObject
     Q_PROPERTY(bool nat MEMBER nat)
     Q_PROPERTY(QString target MEMBER target)
     Q_PROPERTY(quint64 timeoutMs MEMBER timeoutMs)
+    Q_PROPERTY(bool ignoreTargetDeclineErrors MEMBER ignoreTargetDeclineErrors)
 public:
     explicit VoipCaller(SecretsHandler *secrets, QObject *parent = nullptr);
     Q_INVOKABLE void placeCall();
@@ -47,6 +48,7 @@ private:
 
     QString target;
     quint64 timeoutMs;
+    bool ignoreTargetDeclineErrors = true;
 
 private:
     SecretsHandler *secrets;
