@@ -222,7 +222,7 @@ bool SecretsHandler::createCollection()
     return success;
 }
 
-SecretHandler::Identifier Secrets::toIdentifier(const QString &name)
+Secret::Identifier SecretsHandler::toIdentifier(const QString &name)
 {
     return Secret::Identifier(name, collectionName, SecretManager::DefaultEncryptedStoragePluginName);
 }
