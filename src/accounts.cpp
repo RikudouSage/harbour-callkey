@@ -7,9 +7,9 @@
 constexpr auto dataKey = "data";
 
 namespace {
-QString accountKey(const QString &username, const QString &server, const quint16 port)
+QString accountKey(const QString &username, const QString &server, const quint16 port, const QString &target)
 {
-    return QStringLiteral("%1@%2:%3").arg(username).arg(server).arg(port);
+    return QStringLiteral("%1@%2:%3|%4").arg(username).arg(server).arg(port).arg(target);
 }
 }
 
@@ -57,14 +57,15 @@ void Accounts::setAccounts(const QJsonArray &accounts)
         const auto sipUsername = account.value("sipUsername").toString();
         const auto sipServer = account.value("sipServer").toString();
         const auto sipServerPort = account.value("sipServerPort").toInt();
+        const auto target = account.value("target").toString();
 
-        if (sipUsername.isEmpty() || sipServer.isEmpty() || sipServerPort <= 0 || sipServerPort > 65535) {
+        if (sipUsername.isEmpty() || sipServer.isEmpty() || sipServerPort <= 0 || sipServerPort > 65535 || target.isEmpty()) {
             continue;
         }
 
         account.remove("sipPassword");
 
-        const auto group = accountKey(sipUsername, sipServer, static_cast<quint16>(sipServerPort));
+        const auto group = accountKey(sipUsername, sipServer, static_cast<quint16>(sipServerPort), target);
 
         settings->beginGroup(group);
         defer({
@@ -83,9 +84,9 @@ void Accounts::setAccounts(const QJsonArray &accounts)
     emit accountsChanged();
 }
 
-QJsonObject Accounts::getAccount(const QString &username, const QString &server, const quint16 &port)
+QJsonObject Accounts::getAccount(const QString &username, const QString &server, const quint16 &port, const QString &target)
 {
-    const auto group = accountKey(username, server, port);
+    const auto group = accountKey(username, server, port, target);
 
     settings->beginGroup(group);
     defer({
@@ -112,8 +113,9 @@ void Accounts::storeAccount(const QJsonObject &account)
     const auto sipUsername = account.value("sipUsername").toString();
     const auto sipServer = account.value("sipServer").toString();
     const auto sipServerPort = account.value("sipServerPort").toInt();
+    const auto target = account.value("target").toString();
 
-    if (sipUsername.isEmpty() || sipServer.isEmpty() || sipServerPort <= 0 || sipServerPort > 65535) {
+    if (sipUsername.isEmpty() || sipServer.isEmpty() || sipServerPort <= 0 || sipServerPort > 65535 || target.isEmpty()) {
         return;
     }
 
@@ -122,11 +124,11 @@ void Accounts::storeAccount(const QJsonObject &account)
 
     const auto port = static_cast<quint16>(sipServerPort);
 
-    if (getAccount(sipUsername, sipServer, port) == storedAccount) {
+    if (getAccount(sipUsername, sipServer, port, target) == storedAccount) {
         return;
     }
 
-    const auto group = accountKey(sipUsername, sipServer, port);
+    const auto group = accountKey(sipUsername, sipServer, port, target);
 
     settings->beginGroup(group);
     defer({
