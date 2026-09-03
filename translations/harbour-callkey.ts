@@ -37,6 +37,30 @@
         <source>Used only to identify the action in the app.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="account.cover_action">
+        <source>Show as cover action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.cover_settings">
+        <source>Cover settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.cover_icon">
+        <source>Cover icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.cover_icon_none">
+        <source>No icon selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.cover_action_description">
+        <source>Makes this action available from the app cover.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.cover_action_limit_description">
+        <source>Disable another cover action first.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message id="account.username">
         <source>Username</source>
         <translation type="unfinished"></translation>
@@ -115,6 +139,14 @@
     </message>
     <message id="config.remove_account">
         <source>Delete action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="icon_select.title">
+        <source>Choose icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="icon_select.search">
+        <source>Search icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message id="main.no_accounts">

@@ -14,6 +14,7 @@
 #include "voipcallerfactory.h"
 #include "secretshandler.h"
 #include "accounts.h"
+#include "themeicons.h"
 
 constexpr auto TRANSLATION_INSTALL_DIR = "/usr/share/harbour-callkey/translations";
 
@@ -43,9 +44,11 @@ int main(int argc, char *argv[])
     auto secrets = new SecretsHandler(app.data());
     auto callerFactory = new VoipCallerFactory(secrets, app.data());
     auto accounts = new Accounts(app.data());
+    auto themeIcons = new ThemeIcons(app.data());
 
     v->rootContext()->setContextProperty("callerFactory", callerFactory);
     v->rootContext()->setContextProperty("accounts", accounts);
+    v->rootContext()->setContextProperty("themeIcons", themeIcons);
 
     v->setSource(SailfishApp::pathToMainQml());
     v->show();

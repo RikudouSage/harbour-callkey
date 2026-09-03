@@ -11,8 +11,29 @@ Page {
         list.model = accounts.accounts
     }
 
+    function accountKey(account) {
+        return account.sipUsername + "@" + account.sipServer + ":" + account.sipServerPort + "|" + account.target
+    }
+
+    function coverActionCount(excludedAccount) {
+        var accountList = accounts.accounts
+        var excludedKey = excludedAccount ? accountKey(excludedAccount) : ""
+        var count = 0
+
+        for (var i = 0; i < accountList.length; i++) {
+            if (accountList[i].coverAction === true && accountKey(accountList[i]) !== excludedKey) {
+                count++
+            }
+        }
+
+        return count
+    }
+
     function openAccountDialog(account) {
-        var dialog = pageStack.push(Qt.resolvedUrl("AccountEditPage.qml"), { account: account || {} })
+        var dialog = pageStack.push(Qt.resolvedUrl("AccountEditPage.qml"), {
+            account: account || {},
+            coverActionCount: coverActionCount(account)
+        })
         dialog.accepted.connect(function() {
             accounts.storeAccount(dialog.account)
             page.refreshAccounts()
@@ -73,12 +94,26 @@ Page {
             onClicked: page.openAccountDialog(modelData)
 
             Label {
-                x: Theme.horizontalPageMargin
-                width: parent.width - Theme.horizontalPageMargin * 2
+                anchors.left: iconPreview.visible ? iconPreview.right : parent.left
+                anchors.leftMargin: iconPreview.visible ? Theme.paddingMedium : Theme.horizontalPageMargin
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: parent.verticalCenter
                 text: modelData.name
                 truncationMode: TruncationMode.Fade
                 color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
+            }
+
+            Icon {
+                id: iconPreview
+
+                visible: modelData.coverIcon && modelData.coverIcon.length > 0
+                source: visible ? "image://theme/" + modelData.coverIcon : ""
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.horizontalPageMargin
+                anchors.verticalCenter: parent.verticalCenter
+                width: Theme.iconSizeMedium
+                height: Theme.iconSizeMedium
             }
         }
     }

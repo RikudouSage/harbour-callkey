@@ -26,12 +26,14 @@ INSTALLS += libvoipringer
 SOURCES += src/harbour-callkey.cpp \
     src/accounts.cpp \
     src/secretshandler.cpp \
+    src/themeicons.cpp \
     src/voipcaller.cpp \
     src/voipcallerfactory.cpp
 HEADERS += voip/libvoipringer.h \
     src/accounts.h \
     src/defer.h \
     src/secretshandler.h \
+    src/themeicons.h \
     src/voipcaller.h \
     src/voipcallerfactory.h
 
@@ -40,6 +42,8 @@ DISTFILES += qml/harbour-callkey.qml \
     qml/pages/AccountEditPage.qml \
     qml/pages/ConfigPage.qml \
     qml/pages/MainPage.qml \
+    qml/pages/SelectIconPage.qml \
+    qml/js/themeIcons.js \
     rpm/harbour-callkey.changes.in \
     rpm/harbour-callkey.changes.run.in \
     rpm/harbour-callkey.spec \

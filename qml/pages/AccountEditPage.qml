@@ -8,6 +8,7 @@ Dialog {
     property var account: ({})
     property bool existingAccount: false
     property var firstAdvancedField: null
+    property int coverActionCount: 0
 
     Component.onCompleted: {
         existingAccount = Object.keys(account).length > 0
@@ -37,11 +38,29 @@ Dialog {
         page.accept()
     }
 
+    function coverIcon() {
+        return account.coverIcon || ""
+    }
+
+    function hasCoverIcon() {
+        return account.coverIcon && account.coverIcon.length > 0
+    }
+
+    function openIconSelector() {
+        var selector = pageStack.push(Qt.resolvedUrl("SelectIconPage.qml"), {
+            selectedIcon: coverIcon()
+        })
+        selector.iconSelected.connect(function(icon) {
+            page.setAccountValue("coverIcon", icon)
+        })
+    }
+
     canAccept: name.text.length > 0
                && sipUsername.text.length > 0
                && sipServer.text.length > 0
                && sipServerPort.text.length > 0
                && target.text.length > 0
+               && (!account.coverAction || hasCoverIcon())
 
     SilicaFlickable {
         anchors.fill: parent
@@ -197,7 +216,83 @@ Dialog {
                 id: advancedSections
 
                 width: parent.width
-                currentIndex: -1
+                currentIndex: page.account.coverAction ? 0 : -1
+
+                ExpandingSection {
+                    //% "Cover settings"
+                    title: qsTrId("account.cover_settings")
+
+                    content.sourceComponent: Column {
+                        TextSwitch {
+                            id: coverAction
+                            width: parent.width
+                            checked: page.account.coverAction || false
+                            enabled: checked || page.coverActionCount < 3
+                            //% "Show as cover action"
+                            text: qsTrId("account.cover_action")
+                            description: enabled
+                                //% "Makes this action available from the app cover."
+                                ? qsTrId("account.cover_action_description")
+                                //% "Disable another cover action first."
+                                : qsTrId("account.cover_action_limit_description")
+                            onCheckedChanged: {
+                                page.setAccountValue("coverAction", checked)
+                                if (!checked) {
+                                    page.setAccountValue("coverIcon", "")
+                                }
+                            }
+                        }
+
+                        BackgroundItem {
+                            id: coverIconItem
+
+                            width: parent.width
+                            height: Theme.itemSizeMedium
+                            enabled: coverAction.checked
+                            onClicked: page.openIconSelector()
+
+                            Icon {
+                                id: coverIconPreview
+
+                                visible: page.hasCoverIcon()
+                                source: visible ? "image://theme/" + page.coverIcon() : ""
+                                anchors.left: parent.left
+                                anchors.leftMargin: Theme.horizontalPageMargin
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: Theme.iconSizeMedium
+                                height: Theme.iconSizeMedium
+                                opacity: parent.enabled ? 1.0 : Theme.opacityLow
+                            }
+
+                            Column {
+                                anchors.left: coverIconPreview.visible ? coverIconPreview.right : parent.left
+                                anchors.leftMargin: coverIconPreview.visible ? Theme.paddingMedium : Theme.horizontalPageMargin
+                                anchors.right: parent.right
+                                anchors.rightMargin: Theme.horizontalPageMargin
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Label {
+                                    width: parent.width
+                                    //% "Cover icon"
+                                    text: qsTrId("account.cover_icon")
+                                    color: coverIconItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                                    truncationMode: TruncationMode.Fade
+                                }
+
+                                Label {
+                                    width: parent.width
+                                    text: page.hasCoverIcon()
+                                          ? page.coverIcon()
+                                          //% "No icon selected"
+                                          : qsTrId("account.cover_icon_none")
+                                    color: coverIconItem.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                                    font.pixelSize: Theme.fontSizeSmall
+                                    truncationMode: TruncationMode.Fade
+                                }
+                            }
+                        }
+                    }
+                }
 
                 ExpandingSection {
                     //% "Advanced"
