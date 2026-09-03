@@ -1,0 +1,3 @@
+[submodule "voip"]
+	path = voip
+	url = https://github.com/RikudouSage/VoipRinger
