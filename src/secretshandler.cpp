@@ -52,14 +52,19 @@ SecretsHandler::SecretsHandler(QObject *parent) : QObject(parent)
 #endif
 }
 
-QString SecretsHandler::getPassword(const QString &server, const quint16 &port)
+QString SecretsHandler::getPassword(const QString &username, const QString &server, const quint16 &port)
 {
-    return getData("password:" + server + ":" + port);
+    return getData(passwordKey(username, server, port));
 }
 
-void SecretsHandler::setPassword(const QString &server, const quint16 &port, const QString &password)
+void SecretsHandler::setPassword(const QString &username, const QString &server, const quint16 &port, const QString &password)
 {
-    storeData("password:" + server + ":" + port, password);
+    storeData(passwordKey(username, server, port), password);
+}
+
+QString SecretsHandler::passwordKey(const QString &username, const QString &server, const quint16 &port)
+{
+    return QStringLiteral("password:%1@%2:%3").arg(username).arg(server).arg(port);
 }
 
 bool SecretsHandler::clearAllSecrets()

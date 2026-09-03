@@ -16,7 +16,7 @@ public:
     QJsonArray accounts();
     void setAccounts(const QJsonArray &accounts);
 
-    Q_INVOKABLE QJsonObject getAccount(const QString &server, const quint16 &port);
+    Q_INVOKABLE QJsonObject getAccount(const QString &username, const QString &server, const quint16 &port);
     Q_INVOKABLE void storeAccount(const QJsonObject &account);
 
 signals:

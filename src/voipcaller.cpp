@@ -44,7 +44,7 @@ void VoipCaller::placeCall()
 
 QString VoipCaller::sipPassword()
 {
-    return secrets->getPassword(sipServer, sipServerPort);
+    return secrets->getPassword(sipUsername, sipServer, sipServerPort);
 }
 
 void VoipCaller::setSipPassword(const QString &value)
@@ -53,6 +53,6 @@ void VoipCaller::setSipPassword(const QString &value)
         return;
     }
 
-    secrets->setPassword(sipServer, sipServerPort, value);
+    secrets->setPassword(sipUsername, sipServer, sipServerPort, value);
     emit sipPasswordChanged();
 }

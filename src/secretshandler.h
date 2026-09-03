@@ -20,12 +20,13 @@ class SecretsHandler : public QObject
 public:
     explicit SecretsHandler(QObject *parent = nullptr);
 
-    QString getPassword(const QString &server, const quint16 &port);
-    void setPassword(const QString &server, const quint16 &port, const QString &password);
+    QString getPassword(const QString &username, const QString &server, const quint16 &port);
+    void setPassword(const QString &username, const QString &server, const quint16 &port, const QString &password);
 
     bool clearAllSecrets();
 
 private:
+    static QString passwordKey(const QString &username, const QString &server, const quint16 &port);
     bool storeData(const QString &name, const QString &data);
     QString getData(const QString &name);
     bool deleteSecret(const QString &name);
