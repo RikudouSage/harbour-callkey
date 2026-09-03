@@ -29,6 +29,14 @@ Page {
         return count
     }
 
+    function hasCoverIcon(account) {
+        return account.coverIcon ? account.coverIcon.length > 0 : false
+    }
+
+    function coverIconSource(account) {
+        return hasCoverIcon(account) ? "image://theme/" + account.coverIcon : ""
+    }
+
     function openAccountDialog(account) {
         var dialog = pageStack.push(Qt.resolvedUrl("AccountEditPage.qml"), {
             account: account || {},
@@ -107,8 +115,8 @@ Page {
             Icon {
                 id: iconPreview
 
-                visible: modelData.coverIcon && modelData.coverIcon.length > 0
-                source: visible ? "image://theme/" + modelData.coverIcon : ""
+                visible: page.hasCoverIcon(modelData)
+                source: page.coverIconSource(modelData)
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: parent.verticalCenter

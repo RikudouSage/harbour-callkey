@@ -154,11 +154,4 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
-<context>
-    <name>CoverPage</name>
-    <message>
-        <source>My Cover</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
 </TS>

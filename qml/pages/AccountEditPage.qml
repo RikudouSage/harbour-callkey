@@ -43,7 +43,11 @@ Dialog {
     }
 
     function hasCoverIcon() {
-        return account.coverIcon && account.coverIcon.length > 0
+        return coverIcon().length > 0
+    }
+
+    function coverIconSource() {
+        return hasCoverIcon() ? "image://theme/" + coverIcon() : ""
     }
 
     function openIconSelector() {
@@ -248,20 +252,20 @@ Dialog {
 
                             width: parent.width
                             height: Theme.itemSizeMedium
-                            enabled: coverAction.checked
+                            enabled: coverAction.enabled && coverAction.checked
+                            opacity: enabled ? 1.0 : Theme.opacityLow
                             onClicked: page.openIconSelector()
 
                             Icon {
                                 id: coverIconPreview
 
                                 visible: page.hasCoverIcon()
-                                source: visible ? "image://theme/" + page.coverIcon() : ""
+                                source: page.coverIconSource()
                                 anchors.left: parent.left
                                 anchors.leftMargin: Theme.horizontalPageMargin
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: Theme.iconSizeMedium
                                 height: Theme.iconSizeMedium
-                                opacity: parent.enabled ? 1.0 : Theme.opacityLow
                             }
 
                             Column {
