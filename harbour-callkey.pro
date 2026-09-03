@@ -37,6 +37,7 @@ HEADERS += voip/libvoipringer.h \
 
 DISTFILES += qml/harbour-callkey.qml \
     qml/cover/CoverPage.qml \
+    qml/pages/AccountEditPage.qml \
     qml/pages/ConfigPage.qml \
     qml/pages/MainPage.qml \
     rpm/harbour-callkey.changes.in \
