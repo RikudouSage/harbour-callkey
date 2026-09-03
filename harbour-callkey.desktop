@@ -7,5 +7,5 @@ Name=CallKey
 
 [X-Sailjail]
 OrganizationName=cz.chrastecky
-ApplicationName=CallKey
+ApplicationName=callkey
 Permissions=Internet;Secrets

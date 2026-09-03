@@ -26,7 +26,7 @@ using Sailfish::Secrets::StoredSecretRequest;
 using Sailfish::Secrets::DeleteSecretRequest;
 using Sailfish::Secrets::DeleteCollectionRequest;
 
-const QString SecretsHandler::collectionName(QStringLiteral("harbour-callkey"));
+const QString SecretsHandler::collectionName(QStringLiteral("callkey"));
 #endif
 
 #ifdef QT_DEBUG
@@ -122,8 +122,9 @@ bool SecretsHandler::storeData(const QString &name, const QString &data)
     return settings.status() == QSettings::NoError;
 #else
     if (!hasCollection) {
-        createCollection();
-        // todo handle case where collection isn't created
+        if (!createCollection()) {
+            return false;
+        }
     }
 
     auto existingSecret = getSecret(name);
@@ -211,6 +212,7 @@ bool SecretsHandler::createCollection()
     ccr.setAccessControlMode(SecretManager::OwnerOnlyMode);
     ccr.setCollectionLockType(CreateCollectionRequest::DeviceLock);
     ccr.setDeviceLockUnlockSemantic(SecretManager::DeviceLockKeepUnlocked);
+    ccr.setUserInteractionMode(SecretManager::SystemInteraction);
     ccr.setStoragePluginName(SecretManager::DefaultEncryptedStoragePluginName);
     ccr.setEncryptionPluginName(SecretManager::DefaultEncryptedStoragePluginName);
     ccr.startRequest();

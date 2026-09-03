@@ -3,6 +3,8 @@
 
 #include <QJsonDocument>
 #include <QJsonParseError>
+#include <QStandardPaths>
+#include <QDebug>
 
 constexpr auto dataKey = "data";
 
@@ -15,7 +17,11 @@ QString accountKey(const QString &username, const QString &server, const quint16
 
 Accounts::Accounts(QObject *parent) : QObject(parent)
 {
-    settings = new QSettings("cz.chrastecky", "harbour-callkey", this);
+    settings = new QSettings(
+        QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/accounts.ini",
+        QSettings::IniFormat,
+        this
+    );
 }
 
 QJsonArray Accounts::accounts()
@@ -81,6 +87,11 @@ void Accounts::setAccounts(const QJsonArray &accounts)
     }
 
     settings->sync();
+    if (settings->status() != QSettings::NoError) {
+        qWarning() << "Failed setting accounts:" << settings->status();
+        return;
+    }
+
     emit accountsChanged();
 }
 
@@ -141,6 +152,10 @@ void Accounts::storeAccount(const QJsonObject &account)
     );
 
     settings->sync();
+    if (settings->status() != QSettings::NoError) {
+        qWarning() << "Failed storing account:" << settings->status();
+        return;
+    }
 
     emit accountsChanged();
 }
@@ -160,6 +175,10 @@ void Accounts::removeAccount(const QJsonObject &account)
 
     settings->remove(group);
     settings->sync();
+    if (settings->status() != QSettings::NoError) {
+        qWarning() << "Failed removing account:" << settings->status();
+        return;
+    }
 
     emit accountsChanged();
 }
