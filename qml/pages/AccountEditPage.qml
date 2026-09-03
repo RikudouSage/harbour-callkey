@@ -8,6 +8,7 @@ Dialog {
     property var account: ({})
     property var updatedAccount: ({})
     property bool existingAccount: false
+    property bool initialized: false
     property var firstAdvancedField: null
     property int coverActionCount: 0
     property var passwordCaller: null
@@ -22,6 +23,7 @@ Dialog {
         } else {
             loadPassword()
         }
+        initialized = true
     }
 
     function copyAccount(source) {
@@ -221,7 +223,11 @@ Dialog {
                 }
                 //% "Defaults to UDP."
                 description: qsTrId("account.transport_description")
-                onCurrentIndexChanged: page.setAccountValue("sipTransport", ["udp", "tcp", "tls"][currentIndex])
+                onCurrentIndexChanged: {
+                    if (page.initialized) {
+                        page.setAccountValue("sipTransport", ["udp", "tcp", "tls"][currentIndex])
+                    }
+                }
             }
 
             TextField {
