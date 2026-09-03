@@ -144,3 +144,22 @@ void Accounts::storeAccount(const QJsonObject &account)
 
     emit accountsChanged();
 }
+
+void Accounts::removeAccount(const QJsonObject &account)
+{
+    const auto sipUsername = account.value("sipUsername").toString();
+    const auto sipServer = account.value("sipServer").toString();
+    const auto sipServerPort = account.value("sipServerPort").toInt();
+    const auto target = account.value("target").toString();
+
+    if (sipUsername.isEmpty() || sipServer.isEmpty() || sipServerPort <= 0 || sipServerPort > 65535 || target.isEmpty()) {
+        return;
+    }
+
+    const auto group = accountKey(sipUsername, sipServer, static_cast<quint16>(sipServerPort), target);
+
+    settings->remove(group);
+    settings->sync();
+
+    emit accountsChanged();
+}

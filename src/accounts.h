@@ -18,6 +18,7 @@ public:
 
     Q_INVOKABLE QJsonObject getAccount(const QString &username, const QString &server, const quint16 &port, const QString &target);
     Q_INVOKABLE void storeAccount(const QJsonObject &account);
+    Q_INVOKABLE void removeAccount(const QJsonObject &account);
 
 signals:
     void accountsChanged();

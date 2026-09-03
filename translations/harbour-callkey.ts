@@ -13,8 +13,112 @@
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="accounts">
+        <source>Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="cancel">
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.save">
+        <source>Save action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.add">
+        <source>Add action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.name">
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.name_description">
+        <source>Used only to identify the action in the app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.username">
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.server">
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.port">
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.port_description">
+        <source>Defaults to 5060.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.transport">
+        <source>Transport</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.transport_description">
+        <source>Defaults to UDP.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.target">
+        <source>Target</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.password">
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.advanced">
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.advertised_host">
+        <source>Advertised host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.advertised_host_description">
+        <source>Detected automatically from the SIP server and port when empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.local_address">
+        <source>Local address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.local_port">
+        <source>Local port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.nat">
+        <source>NAT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.nat_description">
+        <source>Enabled by default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.timeout">
+        <source>Timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.timeout_description">
+        <source>Defaults to 5000 milliseconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="config.no_accounts">
+        <source>There are no actions configured. Pull down to add one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="config.add_account">
+        <source>Add action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="config.remove_account">
+        <source>Delete action</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message id="main.no_accounts">
-        <source>There are no accounts configured. Please use the pull down menu to configure accounts.</source>
+        <source>There are no actions configured. Please use the pull down menu to configure actions.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

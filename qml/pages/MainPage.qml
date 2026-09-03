@@ -34,7 +34,7 @@ Page {
                 visible: accounts.accounts.length === 0
                 x: Theme.horizontalPageMargin
                 width: parent.width - Theme.horizontalPageMargin * 2
-                //% "There are no accounts configured. Please use the pull down menu to configure accounts."
+                //% "There are no actions configured. Please use the pull down menu to configure actions."
                 text: qsTrId("main.no_accounts")
                 wrapMode: Text.Wrap
             }
