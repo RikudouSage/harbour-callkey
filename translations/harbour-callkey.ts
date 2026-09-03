@@ -154,4 +154,15 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>CoverPage</name>
+    <message>
+        <source>Action executed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Action failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

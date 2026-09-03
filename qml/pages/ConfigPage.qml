@@ -33,6 +33,35 @@ Page {
         return account.coverIcon ? account.coverIcon.length > 0 : false
     }
 
+    function configurePasswordCaller(caller, account) {
+        caller.sipServer = account.sipServer || ""
+        caller.sipUsername = account.sipUsername || ""
+        caller.sipServerPort = account.sipServerPort || 0
+        caller.target = account.target || ""
+    }
+
+    function accountKeyChanged(originalAccount, updatedAccount) {
+        return Object.keys(originalAccount).length > 0
+                && accountKey(originalAccount) !== accountKey(updatedAccount)
+    }
+
+    function savePassword(originalAccount, updatedAccount) {
+        var newCaller = callerFactory.create()
+        configurePasswordCaller(newCaller, updatedAccount)
+
+        if (accountKeyChanged(originalAccount, updatedAccount)) {
+            var originalCaller = callerFactory.create()
+            configurePasswordCaller(originalCaller, originalAccount)
+            originalCaller.removePassword()
+        }
+
+        if (updatedAccount.sipPassword) {
+            newCaller.sipPassword = updatedAccount.sipPassword
+        } else {
+            newCaller.removePassword()
+        }
+    }
+
     function coverIconSource(account) {
         return hasCoverIcon(account) ? "image://theme/" + account.coverIcon : ""
     }
@@ -42,8 +71,17 @@ Page {
             account: account || {},
             coverActionCount: coverActionCount(account)
         })
+        var accountStore = accounts
         dialog.accepted.connect(function() {
-            accounts.storeAccount(dialog.account)
+            var originalAccount = dialog.account
+            var updatedAccount = dialog.updatedAccount
+            var keyChanged = page.accountKeyChanged(originalAccount, updatedAccount)
+
+            page.savePassword(originalAccount, updatedAccount)
+            if (keyChanged) {
+                accountStore.removeAccount(originalAccount)
+            }
+            accountStore.storeAccount(updatedAccount)
             page.refreshAccounts()
         })
     }
@@ -92,8 +130,9 @@ Page {
                     icon.source: "image://theme/icon-m-remove"
                     onClicked: {
                         var account = modelData
+                        var accountStore = accounts
                         remorseDelete(function() {
-                            accounts.removeAccount(account)
+                            accountStore.removeAccount(account)
                             page.refreshAccounts()
                         })
                     }

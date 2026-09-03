@@ -5,6 +5,11 @@ CoverBackground {
     id: cover
 
     property var coverAccounts: []
+    property var coverCallers: []
+    property string feedbackText: ""
+    property color feedbackColor: Theme.primaryColor
+    property string feedbackIconSource: "image://theme/icon-m-accept"
+    property bool feedbackVisible: false
 
     function refreshCoverAccounts() {
         var accountList = accounts.accounts
@@ -19,14 +24,38 @@ CoverBackground {
         }
 
         coverAccounts = enabledAccounts
+        refreshCoverCallers()
     }
 
-    function callAccount(account) {
-        if (!account) {
+    function refreshCoverCallers() {
+        var callers = coverCallers
+
+        for (var i = 0; i < coverAccounts.length; i++) {
+            if (!callers[i]) {
+                callers[i] = callerFactory.create()
+                connectCallerSignals(callers[i])
+            }
+
+            configureCaller(callers[i], coverAccounts[i])
+        }
+
+        coverCallers = callers
+    }
+
+    function connectCallerSignals(caller) {
+        caller.callSucceeded.connect(function() {
+            cover.showSuccess()
+        })
+        caller.callFailed.connect(function(error) {
+            cover.showError(error)
+        })
+    }
+
+    function configureCaller(caller, account) {
+        if (!caller || !account) {
             return
         }
 
-        var caller = callerFactory.create()
         caller.sipServer = account.sipServer || ""
         caller.sipUsername = account.sipUsername || ""
         caller.sipServerPort = account.sipServerPort || 0
@@ -37,7 +66,42 @@ CoverBackground {
         caller.nat = account.nat !== false
         caller.target = account.target || ""
         caller.timeoutMs = account.timeoutMs || 0
+    }
+
+    function callAccount(index) {
+        if (index < 0 || index >= coverAccounts.length) {
+            return
+        }
+
+        var caller = coverCallers[index]
+        if (!caller) {
+            return
+        }
+
         caller.placeCall()
+    }
+
+    function showSuccess() {
+        errorTimer.stop()
+        feedbackText = qsTr("Action executed")
+        feedbackColor = Theme.highlightColor
+        feedbackIconSource = "image://theme/icon-m-accept"
+        feedbackVisible = true
+        successTimer.restart()
+    }
+
+    function showError(error) {
+        successTimer.stop()
+        feedbackText = error && error.length > 0 ? error : qsTr("Action failed")
+        feedbackColor = Theme.errorColor
+        feedbackIconSource = "image://theme/icon-splus-error"
+        feedbackVisible = true
+        errorTimer.restart()
+    }
+
+    function clearFeedback() {
+        feedbackVisible = false
+        feedbackText = ""
     }
 
     function accountAt(index) {
@@ -61,6 +125,18 @@ CoverBackground {
         onAccountsChanged: cover.refreshCoverAccounts()
     }
 
+    Timer {
+        id: successTimer
+        interval: 3000
+        onTriggered: cover.clearFeedback()
+    }
+
+    Timer {
+        id: errorTimer
+        interval: 15000
+        onTriggered: cover.clearFeedback()
+    }
+
     Label {
         anchors.centerIn: parent
         width: parent.width - Theme.paddingLarge * 2
@@ -73,6 +149,34 @@ CoverBackground {
         truncationMode: TruncationMode.Fade
     }
 
+    Row {
+        anchors {
+            left: parent.left
+            leftMargin: Theme.paddingMedium
+            right: parent.right
+            rightMargin: Theme.paddingMedium
+            verticalCenter: parent.verticalCenter
+        }
+        spacing: Theme.paddingSmall
+        visible: cover.feedbackVisible
+
+        Icon {
+            source: cover.feedbackIconSource
+            color: cover.feedbackColor
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Label {
+            width: parent.width - Theme.iconSizeMedium - Theme.paddingSmall
+            color: cover.feedbackColor
+            text: cover.feedbackText
+            font.pixelSize: Theme.fontSizeMedium
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            truncationMode: TruncationMode.Fade
+        }
+    }
+
     Column {
         anchors {
             left: parent.left
@@ -82,7 +186,7 @@ CoverBackground {
             verticalCenter: parent.verticalCenter
         }
         spacing: Theme.paddingSmall
-        visible: cover.coverAccounts.length > 0
+        visible: cover.coverAccounts.length > 0 && !cover.feedbackVisible
 
         Repeater {
             model: cover.coverAccounts
@@ -122,7 +226,7 @@ CoverBackground {
 
         CoverAction {
             iconSource: cover.coverIconSource(0)
-            onTriggered: cover.callAccount(cover.accountAt(0))
+            onTriggered: cover.callAccount(0)
         }
     }
 
@@ -131,12 +235,12 @@ CoverBackground {
 
         CoverAction {
             iconSource: cover.coverIconSource(0)
-            onTriggered: cover.callAccount(cover.accountAt(0))
+            onTriggered: cover.callAccount(0)
         }
 
         CoverAction {
             iconSource: cover.coverIconSource(1)
-            onTriggered: cover.callAccount(cover.accountAt(1))
+            onTriggered: cover.callAccount(1)
         }
     }
 
@@ -145,17 +249,17 @@ CoverBackground {
 
         CoverAction {
             iconSource: cover.coverIconSource(0)
-            onTriggered: cover.callAccount(cover.accountAt(0))
+            onTriggered: cover.callAccount(0)
         }
 
         CoverAction {
             iconSource: cover.coverIconSource(1)
-            onTriggered: cover.callAccount(cover.accountAt(1))
+            onTriggered: cover.callAccount(1)
         }
 
         CoverAction {
             iconSource: cover.coverIconSource(2)
-            onTriggered: cover.callAccount(cover.accountAt(2))
+            onTriggered: cover.callAccount(2)
         }
     }
 

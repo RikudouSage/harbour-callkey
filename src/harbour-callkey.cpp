@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
     auto accounts = new Accounts(app.data());
     auto themeIcons = new ThemeIcons(app.data());
 
+    qmlRegisterUncreatableType<VoipCaller>("cz.chrastecky", 1, 0, "VoipCaller", "VoipCaller instances are created by VoipCallerFactory");
+
     v->rootContext()->setContextProperty("callerFactory", callerFactory);
     v->rootContext()->setContextProperty("accounts", accounts);
     v->rootContext()->setContextProperty("themeIcons", themeIcons);

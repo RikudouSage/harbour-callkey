@@ -6,23 +6,46 @@ Dialog {
 
     allowedOrientations: Orientation.All
     property var account: ({})
+    property var updatedAccount: ({})
     property bool existingAccount: false
     property var firstAdvancedField: null
     property int coverActionCount: 0
+    property var passwordCaller: null
 
     Component.onCompleted: {
-        existingAccount = Object.keys(account).length > 0
+        updatedAccount = copyAccount(account)
+        existingAccount = Object.keys(updatedAccount).length > 0
         if (!existingAccount) {
             setAccountValue("sipServerPort", 5060)
             setAccountValue("sipTransport", "udp")
             setAccountValue("nat", true)
+        } else {
+            loadPassword()
         }
     }
 
+    function copyAccount(source) {
+        var copy = {}
+        var sourceAccount = source || {}
+        for (var key in sourceAccount) {
+            copy[key] = sourceAccount[key]
+        }
+        return copy
+    }
+
+    function loadPassword() {
+        passwordCaller = callerFactory.create()
+        passwordCaller.sipServer = updatedAccount.sipServer || ""
+        passwordCaller.sipUsername = updatedAccount.sipUsername || ""
+        passwordCaller.sipServerPort = updatedAccount.sipServerPort || 0
+        passwordCaller.target = updatedAccount.target || ""
+        setAccountValue("sipPassword", passwordCaller.sipPassword)
+    }
+
     function setAccountValue(name, value) {
-        var updatedAccount = account || {}
-        updatedAccount[name] = value
-        account = updatedAccount
+        var updated = copyAccount(updatedAccount)
+        updated[name] = value
+        updatedAccount = updated
     }
 
     function advancedExpanded() {
@@ -39,7 +62,7 @@ Dialog {
     }
 
     function coverIcon() {
-        return account.coverIcon || ""
+        return updatedAccount.coverIcon || ""
     }
 
     function hasCoverIcon() {
@@ -64,7 +87,7 @@ Dialog {
                && sipServer.text.length > 0
                && sipServerPort.text.length > 0
                && target.text.length > 0
-               && (!account.coverAction || hasCoverIcon())
+               && (!updatedAccount.coverAction || hasCoverIcon())
 
     SilicaFlickable {
         anchors.fill: parent
@@ -89,7 +112,7 @@ Dialog {
             TextField {
                 id: name
                 width: parent.width
-                text: page.account.name || ""
+                text: page.updatedAccount.name || ""
                 //% "Name"
                 label: qsTrId("account.name")
                 //% "Used only to identify the action in the app."
@@ -104,7 +127,7 @@ Dialog {
             TextField {
                 id: sipUsername
                 width: parent.width
-                text: page.account.sipUsername || ""
+                text: page.updatedAccount.sipUsername || ""
                 //% "Username"
                 label: qsTrId("account.username")
                 placeholderText: label
@@ -119,7 +142,7 @@ Dialog {
 
                 id: sipPassword
                 width: parent.width
-                text: page.account.sipPassword || ""
+                text: page.updatedAccount.sipPassword || ""
                 //% "Password"
                 label: qsTrId("account.password")
                 placeholderText: label
@@ -139,7 +162,7 @@ Dialog {
             TextField {
                 id: sipServer
                 width: parent.width
-                text: page.account.sipServer || ""
+                text: page.updatedAccount.sipServer || ""
                 //% "Server"
                 label: qsTrId("account.server")
                 placeholderText: label
@@ -152,9 +175,9 @@ Dialog {
             TextField {
                 id: sipServerPort
                 width: parent.width
-                text: page.account.sipServerPort === undefined
+                text: page.updatedAccount.sipServerPort === undefined
                       ? "5060"
-                      : page.account.sipServerPort > 0 ? page.account.sipServerPort.toString() : ""
+                      : page.updatedAccount.sipServerPort > 0 ? page.updatedAccount.sipServerPort.toString() : ""
                 //% "Port"
                 label: qsTrId("account.port")
                 //% "Defaults to 5060."
@@ -176,7 +199,7 @@ Dialog {
                 //% "Transport"
                 label: qsTrId("account.transport")
                 currentIndex: {
-                    switch (page.account.sipTransport) {
+                    switch (page.updatedAccount.sipTransport) {
                     case "tcp":
                         return 1
                     case "tls":
@@ -204,7 +227,7 @@ Dialog {
             TextField {
                 id: target
                 width: parent.width
-                text: page.account.target || ""
+                text: page.updatedAccount.target || ""
                 //% "Target"
                 label: qsTrId("account.target")
                 placeholderText: label
@@ -220,7 +243,7 @@ Dialog {
                 id: advancedSections
 
                 width: parent.width
-                currentIndex: page.account.coverAction ? 0 : -1
+                currentIndex: page.updatedAccount.coverAction ? 0 : -1
 
                 ExpandingSection {
                     //% "Cover settings"
@@ -230,7 +253,7 @@ Dialog {
                         TextSwitch {
                             id: coverAction
                             width: parent.width
-                            checked: page.account.coverAction || false
+                            checked: page.updatedAccount.coverAction || false
                             enabled: checked || page.coverActionCount < 3
                             //% "Show as cover action"
                             text: qsTrId("account.cover_action")
@@ -306,7 +329,7 @@ Dialog {
                         TextField {
                             id: advertisedHost
                             width: parent.width
-                            text: page.account.advertisedHost || ""
+                            text: page.updatedAccount.advertisedHost || ""
                             //% "Advertised host"
                             label: qsTrId("account.advertised_host")
                             //% "Detected automatically from the SIP server and port when empty."
@@ -322,7 +345,7 @@ Dialog {
                         TextField {
                             id: localAddress
                             width: parent.width
-                            text: page.account.localAddress || ""
+                            text: page.updatedAccount.localAddress || ""
                             //% "Local address"
                             label: qsTrId("account.local_address")
                             placeholderText: label
@@ -335,7 +358,7 @@ Dialog {
                         TextField {
                             id: localPort
                             width: parent.width
-                            text: page.account.localPort ? page.account.localPort.toString() : ""
+                            text: page.updatedAccount.localPort ? page.updatedAccount.localPort.toString() : ""
                             //% "Local port"
                             label: qsTrId("account.local_port")
                             placeholderText: label
@@ -352,7 +375,7 @@ Dialog {
                         TextSwitch {
                             id: nat
                             width: parent.width
-                            checked: page.account.nat === undefined ? true : page.account.nat
+                            checked: page.updatedAccount.nat === undefined ? true : page.updatedAccount.nat
                             //% "NAT"
                             text: qsTrId("account.nat")
                             //% "Enabled by default."
@@ -363,7 +386,7 @@ Dialog {
                         TextField {
                             id: timeoutMs
                             width: parent.width
-                            text: page.account.timeoutMs ? page.account.timeoutMs.toString() : ""
+                            text: page.updatedAccount.timeoutMs ? page.updatedAccount.timeoutMs.toString() : ""
                             //% "Timeout"
                             label: qsTrId("account.timeout")
                             //% "Defaults to 5000 milliseconds."

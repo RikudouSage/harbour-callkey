@@ -22,6 +22,7 @@ public:
 
     QString getPassword(const QString &username, const QString &server, const quint16 &port, const QString &target);
     void setPassword(const QString &username, const QString &server, const quint16 &port, const QString &target, const QString &password);
+    bool removePassword(const QString &username, const QString &server, const quint16 &port, const QString &target);
 
     bool clearAllSecrets();
 

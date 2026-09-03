@@ -22,6 +22,7 @@ class VoipCaller : public QObject
 public:
     explicit VoipCaller(SecretsHandler *secrets, QObject *parent = nullptr);
     Q_INVOKABLE void placeCall();
+    Q_INVOKABLE bool removePassword();
 
     QString sipPassword();
     void setSipPassword(const QString &value);

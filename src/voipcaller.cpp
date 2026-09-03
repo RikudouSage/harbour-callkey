@@ -2,6 +2,7 @@
 
 #include "voip/libvoipringer.h"
 #include <QtConcurrent>
+#include <QDebug>
 
 VoipCaller::VoipCaller(SecretsHandler *secrets, QObject *parent) : QObject(parent), secrets(secrets)
 {
@@ -10,6 +11,10 @@ VoipCaller::VoipCaller(SecretsHandler *secrets, QObject *parent) : QObject(paren
 void VoipCaller::placeCall()
 {
     QtConcurrent::run([=] {
+#ifdef QT_DEBUG
+        qDebug() << "Placing a call";
+#endif
+
         auto sipServer = this->sipServer.toUtf8();
         auto sipUsername = this->sipUsername.toUtf8();
         auto sipPassword = this->sipPassword().toUtf8();
@@ -34,12 +39,19 @@ void VoipCaller::placeCall()
 
         char *error = nullptr;
         if (PlaceCall(&options, &error) != CallResultSuccess) {
-            emit callFailed(QString::fromUtf8(error));
+            const auto errorMessage = QString::fromUtf8(error);
+            emit callFailed(errorMessage);
+            qWarning() << "Error placing a call: " << errorMessage;
             std::free(error);
         } else {
             emit callSucceeded();
         }
     });
+}
+
+bool VoipCaller::removePassword()
+{
+    return secrets->removePassword(sipUsername, sipServer, sipServerPort, target);
 }
 
 QString VoipCaller::sipPassword()

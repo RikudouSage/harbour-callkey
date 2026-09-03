@@ -62,6 +62,11 @@ void SecretsHandler::setPassword(const QString &username, const QString &server,
     storeData(passwordKey(username, server, port, target), password);
 }
 
+bool SecretsHandler::removePassword(const QString &username, const QString &server, const quint16 &port, const QString &target)
+{
+    return deleteSecret(passwordKey(username, server, port, target));
+}
+
 QString SecretsHandler::passwordKey(const QString &username, const QString &server, const quint16 &port, const QString &target)
 {
     return QStringLiteral("password:%1@%2:%3|%4").arg(username).arg(server).arg(port).arg(target);
