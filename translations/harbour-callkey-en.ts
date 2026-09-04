@@ -227,7 +227,7 @@
         <translation type="unfinished">Action failed</translation>
     </message>
     <message id="app_name">
-        <location filename="../qml/cover/CoverPage.qml" line="150"/>
+        <location filename="../qml/cover/CoverPage.qml" line="174"/>
         <location filename="../qml/pages/MainPage.qml" line="79"/>
         <location filename="../qml/pages/MainPage.qml" line="190"/>
         <source>CallKey</source>
@@ -239,12 +239,12 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="89"/>
+        <location filename="../qml/cover/CoverPage.qml" line="113"/>
         <source>Action executed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="98"/>
+        <location filename="../qml/cover/CoverPage.qml" line="122"/>
         <source>Action failed</source>
         <translation type="unfinished"></translation>
     </message>

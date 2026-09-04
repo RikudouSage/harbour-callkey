@@ -6,6 +6,7 @@ CoverBackground {
 
     property var coverAccounts: []
     property var coverCallers: []
+    property var callsInProgress: []
     property string feedbackText: ""
     property color feedbackColor: Theme.primaryColor
     property string feedbackIconSource: "image://theme/icon-m-accept"
@@ -44,11 +45,29 @@ CoverBackground {
 
     function connectCallerSignals(caller) {
         caller.callSucceeded.connect(function() {
+            cover.setCallInProgress(caller, false)
             cover.showSuccess()
         })
         caller.callFailed.connect(function(error) {
+            cover.setCallInProgress(caller, false)
             cover.showError(error)
         })
+    }
+
+    function setCallInProgress(caller, inProgress) {
+        var index = coverCallers.indexOf(caller)
+        if (index < 0) {
+            return
+        }
+
+        var states = callsInProgress.slice(0)
+        states[index] = inProgress
+        callsInProgress = states
+    }
+
+    function callInProgress(index) {
+        return index >= 0 && index < callsInProgress.length
+                && callsInProgress[index] === true
     }
 
     function configureCaller(caller, account) {
@@ -81,6 +100,11 @@ CoverBackground {
             return
         }
 
+        if (callInProgress(index)) {
+            return
+        }
+
+        setCallInProgress(caller, true)
         caller.placeCall()
     }
 
@@ -118,7 +142,7 @@ CoverBackground {
 
     Component.onCompleted: refreshCoverAccounts()
     onStatusChanged: {
-        if (status === PageStatus.Active) {
+        if (status === Cover.Active) {
             refreshCoverAccounts()
         }
     }
@@ -204,10 +228,33 @@ CoverBackground {
                     height: Theme.iconSizeMedium
                     spacing: Theme.paddingSmall
 
-                    Icon {
-                        source: modelData.coverIcon ? "image://theme/" + modelData.coverIcon : ""
+                    Item {
                         width: Theme.iconSizeMedium
                         height: Theme.iconSizeMedium
+
+                        Icon {
+                            anchors.fill: parent
+                            visible: !cover.callInProgress(index)
+                            source: visible && modelData.coverIcon
+                                    ? "image://theme/" + modelData.coverIcon : ""
+                        }
+
+                        BusyIndicator {
+                            id: busyIndicator
+
+                            anchors.fill: parent
+                            running: cover.callInProgress(index)
+                            visible: running
+                            size: BusyIndicatorSize.Medium
+
+                            RotationAnimation on rotation {
+                                from: 0
+                                to: 360
+                                duration: 1000
+                                loops: Animation.Infinite
+                                running: busyIndicator.running && cover.status === Cover.Active
+                            }
+                        }
                     }
 
                     Label {
