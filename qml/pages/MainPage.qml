@@ -124,7 +124,9 @@ Page {
                     successTimer.stop()
                     errorTimer.restart()
                     page.errorText = error && error.length > 0
-                                     ? error : qsTrId("main.action_failed")
+                                     ? error
+                                     //% "Action failed"
+                                     : qsTrId("main.action_failed")
                 })
             }
 

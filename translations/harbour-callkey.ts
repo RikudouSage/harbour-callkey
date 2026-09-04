@@ -182,18 +182,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="main.action_failed">
-        <source></source>
-        <oldsource>Action failed</oldsource>
+        <source>Action failed</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>CoverPage</name>
-    <message>
+    <message id="cover.action_executed">
         <source>Action executed</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message id="cover.action_failed">
         <source>Action failed</source>
         <translation type="unfinished"></translation>
     </message>

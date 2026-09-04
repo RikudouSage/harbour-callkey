@@ -110,7 +110,8 @@ CoverBackground {
 
     function showSuccess() {
         errorTimer.stop()
-        feedbackText = qsTr("Action executed")
+        //% "Action executed"
+        feedbackText = qsTrId("cover.action_executed")
         feedbackColor = Theme.highlightColor
         feedbackIconSource = "image://theme/icon-m-accept"
         feedbackVisible = true
@@ -119,7 +120,9 @@ CoverBackground {
 
     function showError(error) {
         successTimer.stop()
-        feedbackText = error && error.length > 0 ? error : qsTr("Action failed")
+        feedbackText = error && error.length > 0 ? error :
+                       //% "Action failed"
+                       qsTrId("cover.action_failed")
         feedbackColor = Theme.errorColor
         feedbackIconSource = "image://theme/icon-splus-error"
         feedbackVisible = true

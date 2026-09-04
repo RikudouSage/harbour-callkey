@@ -162,9 +162,8 @@
         <translation>Tillgänglig på miniatyren</translation>
     </message>
     <message id="main.action_failed">
-        <source></source>
-        <oldsource>Action failed</oldsource>
-        <translation></translation>
+        <source>Action failed</source>
+        <translation type="unfinished">Åtgärden misslyckades</translation>
     </message>
     <message id="account.early_success_responses">
         <source>Early success responses</source>
@@ -186,14 +185,11 @@
         <source>183 Session Progress</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>CoverPage</name>
-    <message>
+    <message id="cover.action_executed">
         <source>Action executed</source>
         <translation>Åtgärden utförd</translation>
     </message>
-    <message>
+    <message id="cover.action_failed">
         <source>Action failed</source>
         <translation>Åtgärden misslyckades</translation>
     </message>

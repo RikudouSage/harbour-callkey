@@ -216,37 +216,33 @@
         <translation>There are no actions configured. Pull down to add one.</translation>
     </message>
     <message id="main.available_cover">
-        <location filename="../qml/pages/MainPage.qml" line="216"/>
+        <location filename="../qml/pages/MainPage.qml" line="218"/>
         <source>Available on cover</source>
         <translation>Available on cover</translation>
     </message>
     <message id="main.action_failed">
-        <location filename="../qml/pages/MainPage.qml" line="127"/>
-        <source></source>
-        <oldsource>Action failed</oldsource>
+        <location filename="../qml/pages/MainPage.qml" line="129"/>
+        <source>Action failed</source>
         <translation type="unfinished">Action failed</translation>
     </message>
     <message id="app_name">
-        <location filename="../qml/cover/CoverPage.qml" line="174"/>
+        <location filename="../qml/cover/CoverPage.qml" line="177"/>
         <location filename="../qml/pages/MainPage.qml" line="79"/>
-        <location filename="../qml/pages/MainPage.qml" line="190"/>
+        <location filename="../qml/pages/MainPage.qml" line="192"/>
         <source>CallKey</source>
         <oldsource>Call Key</oldsource>
         <extracomment>The name of the application, you might not need to translate this, but it&apos;s up to you</extracomment>
         <translation>CallKey</translation>
     </message>
-</context>
-<context>
-    <name>CoverPage</name>
-    <message>
-        <location filename="../qml/cover/CoverPage.qml" line="113"/>
+    <message id="cover.action_executed">
+        <location filename="../qml/cover/CoverPage.qml" line="114"/>
         <source>Action executed</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../qml/cover/CoverPage.qml" line="122"/>
+    <message id="cover.action_failed">
+        <location filename="../qml/cover/CoverPage.qml" line="125"/>
         <source>Action failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Action failed</translation>
     </message>
 </context>
 </TS>
