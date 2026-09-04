@@ -125,6 +125,26 @@
         <source>Busy or declined status codes will not be reported as errors.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="account.early_success_responses">
+        <source>Early success responses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.early_success_responses_description">
+        <source>Report the action as successful as soon as any selected SIP response is received. Otherwise, wait for the call to finish.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.success_code_2xx">
+        <source>Any 2xx response</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.success_code_180">
+        <source>180 Ringing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="account.success_code_183">
+        <source>183 Session Progress</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message id="account.timeout">
         <source>Timeout</source>
         <translation type="unfinished"></translation>

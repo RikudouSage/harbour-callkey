@@ -21,6 +21,7 @@ Dialog {
             setAccountValue("sipTransport", "udp")
             setAccountValue("nat", true)
             setAccountValue("ignoreTargetDeclineErrors", true)
+            setAccountValue("earlySuccessResponses", ["2xx", "180"])
         } else {
             loadPassword()
         }
@@ -49,6 +50,34 @@ Dialog {
         var updated = copyAccount(updatedAccount)
         updated[name] = value
         updatedAccount = updated
+    }
+
+    function earlySuccessResponses() {
+        return updatedAccount.earlySuccessResponses === undefined
+               ? ["2xx", "180"] : updatedAccount.earlySuccessResponses
+    }
+
+    function hasEarlySuccessResponse(code) {
+        return earlySuccessResponses().indexOf(code) >= 0
+    }
+
+    function setEarlySuccessResponse(code, enabled) {
+        var currentCodes = earlySuccessResponses()
+        var codes = []
+        for (var i = 0; i < currentCodes.length; i++) {
+            codes.push(currentCodes[i])
+        }
+        var index = codes.indexOf(code)
+
+        if (enabled && index < 0) {
+            codes.push(code)
+        } else if (!enabled && index >= 0) {
+            codes.splice(index, 1)
+        } else {
+            return
+        }
+
+        setAccountValue("earlySuccessResponses", codes)
     }
 
     function advancedExpanded() {
@@ -399,6 +428,48 @@ Dialog {
                             //% "Busy or declined status codes will not be reported as errors."
                             description: qsTrId("account.ignore_target_decline_errors_description")
                             onCheckedChanged: page.setAccountValue("ignoreTargetDeclineErrors", checked)
+                        }
+
+                        SectionHeader {
+                            //% "Early success responses"
+                            text: qsTrId("account.early_success_responses")
+                        }
+
+                        Label {
+                            x: Theme.horizontalPageMargin
+                            width: parent.width - Theme.horizontalPageMargin * 2
+                            //% "Report the action as successful as soon as any selected SIP response is received. Otherwise, wait for the call to finish."
+                            text: qsTrId("account.early_success_responses_description")
+                            color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeSmall
+                            wrapMode: Text.Wrap
+                        }
+
+                        TextSwitch {
+                            id: earlySuccessResponse2xx
+                            width: parent.width
+                            checked: page.hasEarlySuccessResponse("2xx")
+                            //% "Any 2xx response"
+                            text: qsTrId("account.success_code_2xx")
+                            onCheckedChanged: page.setEarlySuccessResponse("2xx", checked)
+                        }
+
+                        TextSwitch {
+                            id: earlySuccessResponse180
+                            width: parent.width
+                            checked: page.hasEarlySuccessResponse("180")
+                            //% "180 Ringing"
+                            text: qsTrId("account.success_code_180")
+                            onCheckedChanged: page.setEarlySuccessResponse("180", checked)
+                        }
+
+                        TextSwitch {
+                            id: earlySuccessResponse183
+                            width: parent.width
+                            checked: page.hasEarlySuccessResponse("183")
+                            //% "183 Session Progress"
+                            text: qsTrId("account.success_code_183")
+                            onCheckedChanged: page.setEarlySuccessResponse("183", checked)
                         }
 
                         TextField {

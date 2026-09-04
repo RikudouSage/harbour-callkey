@@ -1,10 +1,20 @@
 #include "voipcaller.h"
 
+#include <functional>
+
 #include <QtConcurrent>
 #include <QDebug>
 
 #include "voip/libvoipringer.h"
 #include "defer.h"
+
+namespace {
+struct CallbackData {
+    bool handled = false;
+    QStringList earlySuccessResponses;
+    std::function<void()> callSucceeded;
+};
+}
 
 VoipCaller::VoipCaller(SecretsHandler *secrets, QObject *parent) : QObject(parent), secrets(secrets)
 {
@@ -25,6 +35,37 @@ void VoipCaller::placeCall()
         auto localAddress = this->localAddress.toUtf8();
         auto target = this->target.toUtf8();
 
+        CallbackData callbackData = {
+            .earlySuccessResponses = earlySuccessResponses,
+            .callSucceeded = [this]() {
+                emit callSucceeded();
+            },
+        };
+
+        TargetReachedCallback onTargetReached = [](int statusCode, void *userData) {
+            auto callbackData = static_cast<CallbackData *>(userData);
+
+            if (callbackData->handled) {
+                return;
+            }
+
+            bool handled = false;
+            if (statusCode >= 200 && statusCode < 300 && callbackData->earlySuccessResponses.contains("2xx")) {
+                handled = true;
+            }
+            if (statusCode == 183 && callbackData->earlySuccessResponses.contains("183")) {
+                handled = true;
+            }
+            if (statusCode == 180 && callbackData->earlySuccessResponses.contains("180")) {
+                handled = true;
+            }
+
+            if (handled) {
+                callbackData->handled = true;
+                callbackData->callSucceeded();
+            }
+        };
+
         CallOptions options = {
             .sipServer = sipServer.constData(),
             .sipUsername = sipUsername.constData(),
@@ -37,6 +78,8 @@ void VoipCaller::placeCall()
             .nat = &nat,
             .target = target.constData(),
             .timeout_ms = timeoutMs,
+            .onTargetReached = onTargetReached,
+            .onTargetReachedUserData = &callbackData,
         };
 
         char *error = nullptr;
@@ -47,15 +90,21 @@ void VoipCaller::placeCall()
             });
 
             if (ignoreTargetDeclineErrors && result == CallResultDeclined) {
-                emit callSucceeded();
+                if (!callbackData.handled) {
+                    emit callSucceeded();
+                }
                 return;
             }
 
             const auto errorMessage = QString::fromUtf8(error);
-            emit callFailed(errorMessage);
             qWarning() << "Error placing a call: " << errorMessage;
+            if (!callbackData.handled) {
+                emit callFailed(errorMessage);
+            }
         } else {
-            emit callSucceeded();
+            if (!callbackData.handled) {
+                emit callSucceeded();
+            }
         }
     });
 }

@@ -67,6 +67,8 @@ CoverBackground {
         caller.target = account.target || ""
         caller.timeoutMs = account.timeoutMs || 0
         caller.ignoreTargetDeclineErrors = account.ignoreTargetDeclineErrors !== false
+        caller.earlySuccessResponses = account.earlySuccessResponses === undefined
+                                       ? ["2xx", "180"] : account.earlySuccessResponses
     }
 
     function callAccount(index) {

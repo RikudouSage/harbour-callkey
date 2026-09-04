@@ -2,6 +2,7 @@
 #define VOIPCALLER_H
 
 #include <QObject>
+#include <QStringList>
 
 #include "secretshandler.h"
 
@@ -20,6 +21,7 @@ class VoipCaller : public QObject
     Q_PROPERTY(QString target MEMBER target)
     Q_PROPERTY(quint64 timeoutMs MEMBER timeoutMs)
     Q_PROPERTY(bool ignoreTargetDeclineErrors MEMBER ignoreTargetDeclineErrors)
+    Q_PROPERTY(QStringList earlySuccessResponses MEMBER earlySuccessResponses)
 public:
     explicit VoipCaller(SecretsHandler *secrets, QObject *parent = nullptr);
     Q_INVOKABLE void placeCall();
@@ -49,6 +51,7 @@ private:
     QString target;
     quint64 timeoutMs;
     bool ignoreTargetDeclineErrors = true;
+    QStringList earlySuccessResponses = {QStringLiteral("2xx"), QStringLiteral("180")};
 
 private:
     SecretsHandler *secrets;
