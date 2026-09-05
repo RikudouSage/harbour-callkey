@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
-    <name></name>
+    <name/>
     <message id="app_name">
         <source>CallKey</source>
         <oldsource>Call Key</oldsource>
-        <extracomment>The name of the application, you might not need to translate this, but it&apos;s up to you</extracomment>
+        <extracomment>The name of the application, you might not need to translate this, but it's up to you</extracomment>
         <translation>CallKey</translation>
     </message>
     <message id="accounts">
@@ -125,6 +123,26 @@
         <source>Busy or declined status codes will not be reported as errors.</source>
         <translation>Statuskoderna &quot;Upptagen&quot; eller &quot;Avvisas&quot; kommer inte att rapporteras som fel.</translation>
     </message>
+    <message id="account.early_success_responses">
+        <source>Early success responses</source>
+        <translation>Tidiga framgångsrika reaktioner</translation>
+    </message>
+    <message id="account.early_success_responses_description">
+        <source>Report the action as successful as soon as any selected SIP response is received. Otherwise, wait for the call to finish.</source>
+        <translation>Rapporterar åtgärden som lyckad så snart något valt SIP-svar tas emot. Annars, vänta på att samtalet ska avslutas.</translation>
+    </message>
+    <message id="account.success_code_2xx">
+        <source>Any 2xx response</source>
+        <translation>Valfritt 2xx-svar</translation>
+    </message>
+    <message id="account.success_code_180">
+        <source>180 Ringing</source>
+        <translation>180-uppringning</translation>
+    </message>
+    <message id="account.success_code_183">
+        <source>183 Session Progress</source>
+        <translation>183-sessionsförlopp</translation>
+    </message>
     <message id="account.timeout">
         <source>Timeout</source>
         <translation>Tidsgräns</translation>
@@ -163,27 +181,7 @@
     </message>
     <message id="main.action_failed">
         <source>Action failed</source>
-        <translation type="unfinished">Åtgärden misslyckades</translation>
-    </message>
-    <message id="account.early_success_responses">
-        <source>Early success responses</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="account.early_success_responses_description">
-        <source>Report the action as successful as soon as any selected SIP response is received. Otherwise, wait for the call to finish.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="account.success_code_2xx">
-        <source>Any 2xx response</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="account.success_code_180">
-        <source>180 Ringing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="account.success_code_183">
-        <source>183 Session Progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtgärden misslyckades</translation>
     </message>
     <message id="cover.action_executed">
         <source>Action executed</source>
