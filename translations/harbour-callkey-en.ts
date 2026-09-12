@@ -244,5 +244,41 @@
         <source>Action failed</source>
         <translation type="unfinished">Action failed</translation>
     </message>
+    <message id="settings.title">
+        <source>Settings</source>
+        <translation>Settings</translation>
+    </message>
+    <message id="settings.mpris">
+        <source>Media player integration (MPRIS)</source>
+        <translation>Media player integration (MPRIS)</translation>
+    </message>
+    <message id="settings.mpris_description">
+        <source>Expose the Primary action to media controls while CallKey is running.</source>
+        <translation>Expose the Primary action to media controls while CallKey is running.</translation>
+    </message>
+    <message id="account.mpris_settings">
+        <source>Media player integration</source>
+        <translation>Media player integration</translation>
+    </message>
+    <message id="account.primary_action">
+        <source>Primary action</source>
+        <translation>Primary action</translation>
+    </message>
+    <message id="account.primary_action_description">
+        <source>The Primary action can be run from media controls. Enable or disable the integration in &lt;a href=&quot;settings&quot;&gt;Settings&lt;/a&gt;.</source>
+        <translation>The Primary action can be run from media controls. Enable or disable the integration in &lt;a href=&quot;settings&quot;&gt;Settings&lt;/a&gt;.</translation>
+    </message>
+    <message id="mpris.running">
+        <source>Running action...</source>
+        <translation>Running action...</translation>
+    </message>
+    <message id="mpris.success">
+        <source>Success</source>
+        <translation>Success</translation>
+    </message>
+    <message id="mpris.error">
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
 </context>
 </TS>

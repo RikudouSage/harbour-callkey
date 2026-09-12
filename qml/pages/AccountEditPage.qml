@@ -282,6 +282,34 @@ Dialog {
                 currentIndex: page.updatedAccount.coverAction ? 0 : -1
 
                 ExpandingSection {
+                    //% "Media player integration"
+                    title: qsTrId("account.mpris_settings")
+
+                    content.sourceComponent: Column {
+                        TextSwitch {
+                            width: parent.width
+                            checked: page.updatedAccount.primaryAction || false
+                            enabled: appSettings.mprisEnabled
+                            //% "Primary action"
+                            text: qsTrId("account.primary_action")
+                            onCheckedChanged: page.setAccountValue("primaryAction", checked)
+                        }
+
+                        Label {
+                            x: Theme.horizontalPageMargin
+                            width: parent.width - Theme.horizontalPageMargin * 2
+                            textFormat: Text.RichText
+                            wrapMode: Text.Wrap
+                            color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeSmall
+                            //% "The Primary action can be run from media controls. Enable or disable the integration in <a href=\"settings\">Settings</a>."
+                            text: qsTrId("account.primary_action_description")
+                            onLinkActivated: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
+                        }
+                    }
+                }
+
+                ExpandingSection {
                     //% "Cover settings"
                     title: qsTrId("account.cover_settings")
 
