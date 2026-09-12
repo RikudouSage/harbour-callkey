@@ -64,6 +64,12 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                //% "Settings"
+                text: qsTrId("settings.title")
+                onClicked: pageStack.animatorPush("SettingsPage.qml")
+            }
+
+            MenuItem {
                 //% "Actions"
                 text: qsTrId("accounts")
                 onClicked: pageStack.animatorPush("ConfigPage.qml")

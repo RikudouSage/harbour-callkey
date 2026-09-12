@@ -13,7 +13,7 @@
 TARGET = harbour-callkey
 CONFIG += sailfishapp c++20
 PKGCONFIG += sailfishsecrets sailfishcrypto
-QT += concurrent gui
+QT += concurrent gui dbus
 
 GO_LIBDIR = /usr/share/$$TARGET/lib
 INCLUDEPATH += $$PWD/voip
@@ -24,14 +24,18 @@ libvoipringer.files = $$PWD/voip/libvoipringer.so
 INSTALLS += libvoipringer
 
 SOURCES += src/harbour-callkey.cpp \
+    src/appsettings.cpp \
     src/accounts.cpp \
+    src/mpriscontroller.cpp \
     src/secretshandler.cpp \
     src/themeicons.cpp \
     src/voipcaller.cpp \
     src/voipcallerfactory.cpp
 HEADERS += voip/libvoipringer.h \
+    src/appsettings.h \
     src/accounts.h \
     src/defer.h \
+    src/mpriscontroller.h \
     src/secretshandler.h \
     src/themeicons.h \
     src/voipcaller.h \
@@ -42,6 +46,7 @@ DISTFILES += qml/harbour-callkey.qml \
     qml/pages/AccountEditPage.qml \
     qml/pages/ConfigPage.qml \
     qml/pages/MainPage.qml \
+    qml/pages/SettingsPage.qml \
     qml/pages/SelectIconPage.qml \
     qml/js/themeIcons.js \
     rpm/harbour-callkey.changes.in \

@@ -53,6 +53,7 @@ void Accounts::setAccounts(const QJsonArray &accounts)
 
     settings->clear();
 
+    bool primarySeen = false;
     for (const auto &value : accounts) {
         if (!value.isObject()) {
             continue;
@@ -70,6 +71,13 @@ void Accounts::setAccounts(const QJsonArray &accounts)
         }
 
         account.remove("sipPassword");
+        if (account.value("primaryAction").toBool()) {
+            if (primarySeen) {
+                account["primaryAction"] = false;
+            } else {
+                primarySeen = true;
+            }
+        }
 
         const auto group = accountKey(sipUsername, sipServer, static_cast<quint16>(sipServerPort), target);
 
@@ -132,6 +140,23 @@ void Accounts::storeAccount(const QJsonObject &account)
 
     auto storedAccount = account;
     storedAccount.remove("sipPassword");
+
+    if (storedAccount.value("primaryAction").toBool()) {
+        for (const auto &existingValue : accounts()) {
+            auto existing = existingValue.toObject();
+            if (!existing.value("primaryAction").toBool()) {
+                continue;
+            }
+            const auto existingGroup = accountKey(existing.value("sipUsername").toString(),
+                                                  existing.value("sipServer").toString(),
+                                                  static_cast<quint16>(existing.value("sipServerPort").toInt()),
+                                                  existing.value("target").toString());
+            existing["primaryAction"] = false;
+            settings->beginGroup(existingGroup);
+            settings->setValue(dataKey, QJsonDocument(existing).toJson(QJsonDocument::Compact));
+            settings->endGroup();
+        }
+    }
 
     const auto port = static_cast<quint16>(sipServerPort);
 

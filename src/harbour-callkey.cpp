@@ -14,6 +14,8 @@
 #include "voipcallerfactory.h"
 #include "secretshandler.h"
 #include "accounts.h"
+#include "appsettings.h"
+#include "mpriscontroller.h"
 #include "themeicons.h"
 
 constexpr auto TRANSLATION_INSTALL_DIR = "/usr/share/harbour-callkey/translations";
@@ -44,12 +46,16 @@ int main(int argc, char *argv[])
     auto secrets = new SecretsHandler(app.data());
     auto callerFactory = new VoipCallerFactory(secrets, app.data());
     auto accounts = new Accounts(app.data());
+    auto appSettings = new AppSettings(app.data());
+    auto mprisController = new MprisController(accounts, appSettings, callerFactory, app.data());
+    Q_UNUSED(mprisController)
     auto themeIcons = new ThemeIcons(app.data());
 
     qmlRegisterUncreatableType<VoipCaller>("cz.chrastecky", 1, 0, "VoipCaller", "VoipCaller instances are created by VoipCallerFactory");
 
     v->rootContext()->setContextProperty("callerFactory", callerFactory);
     v->rootContext()->setContextProperty("accounts", accounts);
+    v->rootContext()->setContextProperty("appSettings", appSettings);
     v->rootContext()->setContextProperty("themeIcons", themeIcons);
 
     v->setSource(SailfishApp::pathToMainQml());

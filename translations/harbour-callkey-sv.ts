@@ -191,5 +191,14 @@
         <source>Action failed</source>
         <translation>Åtgärden misslyckades</translation>
     </message>
+    <message id="settings.title"><source>Settings</source><translation type="unfinished"></translation></message>
+    <message id="settings.mpris"><source>Media player integration (MPRIS)</source><translation type="unfinished"></translation></message>
+    <message id="settings.mpris_description"><source>Expose the Primary action to media controls while CallKey is running.</source><translation type="unfinished"></translation></message>
+    <message id="account.mpris_settings"><source>Media player integration</source><translation type="unfinished"></translation></message>
+    <message id="account.primary_action"><source>Primary action</source><translation type="unfinished"></translation></message>
+    <message id="account.primary_action_description"><source>The Primary action can be run from media controls. Enable or disable the integration in &lt;a href=&quot;settings&quot;&gt;Settings&lt;/a&gt;.</source><translation type="unfinished"></translation></message>
+    <message id="mpris.running"><source>Running action...</source><translation type="unfinished"></translation></message>
+    <message id="mpris.success"><source>Success</source><translation type="unfinished"></translation></message>
+    <message id="mpris.error"><source>Error</source><translation type="unfinished"></translation></message>
 </context>
 </TS>
