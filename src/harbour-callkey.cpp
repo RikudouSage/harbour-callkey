@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
     auto secrets = new SecretsHandler(app.data());
     auto accounts = new Accounts(app.data());
 
+#ifndef HARBOUR_STORE
     if (dbusServiceMode) {
         auto callKeyDBus = registerDBus(accounts, secrets, app.data());
         if (!callKeyDBus) {
@@ -108,6 +109,7 @@ int main(int argc, char *argv[])
 
         return app->exec();
     }
+#endif
 
     QScopedPointer<QQuickView> v(SailfishApp::createView());
 
