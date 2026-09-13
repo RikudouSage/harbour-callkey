@@ -103,7 +103,9 @@ int main(int argc, char *argv[])
         QObject::connect(callKeyDBus, &CallKeyDBus::actionFinished, app.data(),
             [app = app.data()](const QString &, bool success, const QString &message) {
                 qWarning() << message;
-                app->exit(success ? 0 : 1);
+                QTimer::singleShot(0, app, [app, success] {
+                    app->exit(success ? 0 : 1);
+                });
             });
         QTimer::singleShot(2 * 60 * 1000, app.data(), &QCoreApplication::quit);
 
