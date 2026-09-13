@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QSettings>
+#include <QStandardPaths>
 
 #ifndef QT_DEBUG
 #include <Sailfish/Secrets/collectionnamesrequest.h>
@@ -32,7 +33,10 @@ const QString SecretsHandler::collectionName(QStringLiteral("callkey"));
 #ifdef QT_DEBUG
 static QSettings &insecureEmulatorSecrets()
 {
-    static QSettings settings(QStringLiteral("cz.chrastecky"), QStringLiteral("cookbook-insecure-emulator-secrets"));
+    static QSettings settings(
+        QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/secrets.conf",
+        QSettings::Format::IniFormat
+    );
     return settings;
 }
 #endif

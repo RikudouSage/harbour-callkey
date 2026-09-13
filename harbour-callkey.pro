@@ -13,7 +13,7 @@
 TARGET = harbour-callkey
 CONFIG += sailfishapp c++20
 PKGCONFIG += sailfishsecrets sailfishcrypto
-QT += concurrent gui
+QT += concurrent gui dbus
 
 GO_LIBDIR = /usr/share/$$TARGET/lib
 INCLUDEPATH += $$PWD/voip
@@ -25,12 +25,14 @@ INSTALLS += libvoipringer
 
 SOURCES += src/harbour-callkey.cpp \
     src/accounts.cpp \
+    src/callkeydbus.cpp \
     src/secretshandler.cpp \
     src/themeicons.cpp \
     src/voipcaller.cpp \
     src/voipcallerfactory.cpp
 HEADERS += voip/libvoipringer.h \
     src/accounts.h \
+    src/callkeydbus.h \
     src/defer.h \
     src/secretshandler.h \
     src/themeicons.h \

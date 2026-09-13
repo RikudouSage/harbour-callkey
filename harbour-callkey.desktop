@@ -9,3 +9,4 @@ Name=CallKey
 OrganizationName=cz.chrastecky
 ApplicationName=callkey
 Permissions=Internet;Secrets
+ExecDBus=harbour-callkey dbus

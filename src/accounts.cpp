@@ -95,6 +95,17 @@ void Accounts::setAccounts(const QJsonArray &accounts)
     emit accountsChanged();
 }
 
+QJsonObject Accounts::getAccountByName(const QString &name)
+{
+    for (const auto &account : accounts()) {
+        if (account.toObject().value("name").toString() == name) {
+            return account.toObject();
+        }
+    }
+
+    return QJsonObject();
+}
+
 QJsonObject Accounts::getAccount(const QString &username, const QString &server, const quint16 &port, const QString &target)
 {
     const auto group = accountKey(username, server, port, target);

@@ -30,14 +30,13 @@ Trigger gates, doors and other devices with a quick VoIP call.
 
 %build
 
-%qmake5 
+%qmake5
 
 %make_build
 
 
 %install
 %qmake5_install
-
 
 desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
 
