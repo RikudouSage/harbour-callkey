@@ -23,10 +23,6 @@ libvoipringer.path = $$GO_LIBDIR
 libvoipringer.files = $$PWD/voip/libvoipringer.so
 INSTALLS += libvoipringer
 
-harbour_store {
-    DEFINES += HARBOUR_STORE
-}
-
 SOURCES += src/harbour-callkey.cpp \
     src/accounts.cpp \
     src/callkeydbus.cpp \
