@@ -10,6 +10,7 @@
 #include <QTranslator>
 #include <QDBusConnection>
 #include <QDBusError>
+#include <QTimer>
 
 #include <sailfishapp.h>
 
@@ -21,11 +22,32 @@
 
 constexpr auto TRANSLATION_INSTALL_DIR = "/usr/share/harbour-callkey/translations";
 
-void registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent);
+CallKeyDBus *registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent);
 
 int main(int argc, char *argv[])
 {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
+
+    const bool dbusServiceMode = app->arguments().value(1) == "dbus";
+
+    auto secrets = new SecretsHandler(app.data());
+    auto accounts = new Accounts(app.data());
+
+    if (dbusServiceMode) {
+        auto callKeyDBus = registerDBus(accounts, secrets, app.data());
+        if (!callKeyDBus) {
+            return 1;
+        }
+
+        QObject::connect(callKeyDBus, &CallKeyDBus::actionFinished, app.data(),
+            [app = app.data()](const QString &, bool success, const QString &) {
+                app->exit(success ? 0 : 1);
+            });
+        QTimer::singleShot(2 * 60 * 1000, app.data(), &QCoreApplication::quit);
+
+        return app->exec();
+    }
+
     QScopedPointer<QQuickView> v(SailfishApp::createView());
 
     QTranslator *defaultLang = new QTranslator(app.data());
@@ -46,9 +68,7 @@ int main(int argc, char *argv[])
     v->rootContext()->setContextProperty("isDebug", false);
 #endif
 
-    auto secrets = new SecretsHandler(app.data());
     auto callerFactory = new VoipCallerFactory(secrets, app.data());
-    auto accounts = new Accounts(app.data());
     auto themeIcons = new ThemeIcons(app.data());
 
     qmlRegisterUncreatableType<VoipCaller>("cz.chrastecky", 1, 0, "VoipCaller", "VoipCaller instances are created by VoipCallerFactory");
@@ -65,20 +85,22 @@ int main(int argc, char *argv[])
     return app->exec();
 }
 
-void registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent) {
+CallKeyDBus *registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent) {
     auto callKeyDBus = new CallKeyDBus(accounts, secrets, parent);
     auto bus = QDBusConnection::sessionBus();
 
     if (!bus.registerService("dev.rikudou.callkey")) {
-        callKeyDBus->deleteLater();
         qWarning() << "Cannot register D-Bus service:" << bus.lastError().message();
-        return;
+        delete callKeyDBus;
+        return nullptr;
     }
 
     if (!bus.registerObject("/dev/rikudou/callkey", callKeyDBus, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
-        callKeyDBus->deleteLater();
         qWarning() << "Cannot register D-Bus object:" << bus.lastError().message();
         bus.unregisterService("dev.rikudou.callkey");
-        return;
+        delete callKeyDBus;
+        return nullptr;
     }
+
+    return callKeyDBus;
 }
