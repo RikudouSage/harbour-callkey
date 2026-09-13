@@ -99,14 +99,14 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        QObject::connect(callKeyDBus, &CallKeyDBus::actionFinished, app.data(),
-            [app = app.data()](const QString &, bool success, const QString &message) {
-                qWarning() << message;
-                QTimer::singleShot(0, app, [app, success] {
-                    app->exit(success ? 0 : 1);
-                });
+        QTimer idleTimer;
+        idleTimer.setSingleShot(true);
+        QObject::connect(&idleTimer, &QTimer::timeout, app.data(), &QCoreApplication::quit);
+        QObject::connect(callKeyDBus, &CallKeyDBus::actionStarted, &idleTimer,
+            [&idleTimer](const QString &) {
+                idleTimer.start(30 * 1000);
             });
-        QTimer::singleShot(2 * 60 * 1000, app.data(), &QCoreApplication::quit);
+        idleTimer.start(30 * 1000);
 
         return app->exec();
     }
