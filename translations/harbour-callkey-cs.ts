@@ -1,10 +1,12 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
-    <name/>
+    <name></name>
     <message id="app_name">
         <source>CallKey</source>
         <oldsource>Call Key</oldsource>
-        <extracomment>The name of the application, you might not need to translate this, but it's up to you</extracomment>
+        <extracomment>The name of the application, you might not need to translate this, but it&apos;s up to you</extracomment>
         <translation>CallKey</translation>
     </message>
     <message id="accounts">

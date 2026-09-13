@@ -8,6 +8,8 @@
 #include <QtQml>
 #include <QQmlEngine>
 #include <QTranslator>
+#include <QDBusConnection>
+#include <QDBusError>
 
 #include <sailfishapp.h>
 
@@ -15,8 +17,11 @@
 #include "secretshandler.h"
 #include "accounts.h"
 #include "themeicons.h"
+#include "callkeydbus.h"
 
 constexpr auto TRANSLATION_INSTALL_DIR = "/usr/share/harbour-callkey/translations";
+
+void registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent);
 
 int main(int argc, char *argv[])
 {
@@ -52,8 +57,28 @@ int main(int argc, char *argv[])
     v->rootContext()->setContextProperty("accounts", accounts);
     v->rootContext()->setContextProperty("themeIcons", themeIcons);
 
+    registerDBus(accounts, secrets, app.data());
+
     v->setSource(SailfishApp::pathToMainQml());
     v->show();
 
     return app->exec();
+}
+
+void registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent) {
+    auto callKeyDBus = new CallKeyDBus(accounts, secrets, parent);
+    auto bus = QDBusConnection::sessionBus();
+
+    if (!bus.registerService("dev.rikudou.callkey")) {
+        callKeyDBus->deleteLater();
+        qWarning() << "Cannot register D-Bus service:" << bus.lastError().message();
+        return;
+    }
+
+    if (!bus.registerObject("/dev/rikudou/callkey", callKeyDBus, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
+        callKeyDBus->deleteLater();
+        qWarning() << "Cannot register D-Bus object:" << bus.lastError().message();
+        bus.unregisterService("dev.rikudou.callkey");
+        return;
+    }
 }
