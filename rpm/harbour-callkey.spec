@@ -1,7 +1,7 @@
 Name:       harbour-callkey
 
 Summary:    CallKey
-Version:    1.1.2
+Version:    1.2.0
 Release:    1
 License:    MIT
 URL:        https://github.com/RikudouSage/harbour-callkey
