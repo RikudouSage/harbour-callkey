@@ -88,12 +88,12 @@ int main(int argc, char *argv[])
 {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     defaultMessageHandler = qInstallMessageHandler(messageHandler);
-    const bool dbusServiceMode = app->arguments().value(1) == "dbus";
 
     auto secrets = new SecretsHandler(app.data());
     auto accounts = new Accounts(app.data());
 
 #ifndef HARBOUR_STORE
+    const bool dbusServiceMode = app->arguments().value(1) == "dbus";
     if (dbusServiceMode) {
         auto callKeyDBus = registerDBus(accounts, secrets, app.data());
         if (!callKeyDBus) {
