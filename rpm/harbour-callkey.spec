@@ -7,6 +7,8 @@ License:    MIT
 URL:        https://github.com/RikudouSage/harbour-callkey
 Source0:    %{name}-%{version}.tar.bz2
 
+%{!?harbour_store:%define harbour_store %(if [ -n "$HARBOUR_STORE" ]; then echo 1; elif echo "$PWD" | grep -q -- '-Store'; then echo 1; else echo 0; fi)}
+
 %global __provides_exclude_from ^%{_datadir}/%{name}/lib/.*$
 %global __requires_exclude_from ^%{_datadir}/%{name}/lib/.*$
 %global __requires_exclude ^libvoipringer\\.so$|^libvoipringer\\.so\\(\\)\\(64bit\\)$
@@ -30,7 +32,11 @@ Trigger gates, doors and other devices with a quick VoIP call.
 
 %build
 
-%qmake5 
+%if 0%{?harbour_store}
+%qmake5 CONFIG+=harbour_store
+%else
+%qmake5
+%endif
 
 %make_build
 
@@ -38,6 +44,9 @@ Trigger gates, doors and other devices with a quick VoIP call.
 %install
 %qmake5_install
 
+%if 0%{?harbour_store}
+sed -i '/^ExecDBus=/d' %{buildroot}%{_datadir}/applications/%{name}.desktop
+%endif
 
 desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
 

@@ -22,12 +22,72 @@
 
 constexpr auto TRANSLATION_INSTALL_DIR = "/usr/share/harbour-callkey/translations";
 
+namespace {
+
+QMutex messageHandlerMutex;
+QtMessageHandler defaultMessageHandler = nullptr;
+
+QString messageTypeName(QtMsgType type)
+{
+    switch (type) {
+    case QtDebugMsg:
+        return QStringLiteral("debug");
+    case QtInfoMsg:
+        return QStringLiteral("info");
+    case QtWarningMsg:
+        return QStringLiteral("warning");
+    case QtCriticalMsg:
+        return QStringLiteral("critical");
+    case QtFatalMsg:
+        return QStringLiteral("fatal");
+    }
+
+    return QStringLiteral("unknown");
+}
+
+void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
+{
+    if (defaultMessageHandler != nullptr) {
+        defaultMessageHandler(type, context, message);
+    } else {
+        fprintf(stderr, "%s\n", qPrintable(message));
+        fflush(stderr);
+    }
+
+    if (type != QtWarningMsg) {
+        return;
+    }
+
+    const QMutexLocker lock(&messageHandlerMutex);
+    const auto logDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (logDir.isEmpty() || !QDir().mkpath(logDir)) {
+        return;
+    }
+
+    QFile file(QDir(logDir).filePath(QStringLiteral("warnings.log")));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream stream(&file);
+    stream << QDateTime::currentDateTimeUtc().toString(Qt::ISODate)
+           << " [" << messageTypeName(type) << "] " << message;
+
+    if (context.file != nullptr) {
+        stream << " (" << context.file << ':' << context.line << ')';
+    }
+
+    stream << '\n';
+}
+
+}
+
 CallKeyDBus *registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent);
 
 int main(int argc, char *argv[])
 {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-
+    defaultMessageHandler = qInstallMessageHandler(messageHandler);
     const bool dbusServiceMode = app->arguments().value(1) == "dbus";
 
     auto secrets = new SecretsHandler(app.data());
@@ -40,7 +100,8 @@ int main(int argc, char *argv[])
         }
 
         QObject::connect(callKeyDBus, &CallKeyDBus::actionFinished, app.data(),
-            [app = app.data()](const QString &, bool success, const QString &) {
+            [app = app.data()](const QString &, bool success, const QString &message) {
+                qWarning() << message;
                 app->exit(success ? 0 : 1);
             });
         QTimer::singleShot(2 * 60 * 1000, app.data(), &QCoreApplication::quit);
@@ -89,15 +150,15 @@ CallKeyDBus *registerDBus(Accounts *accounts, SecretsHandler *secrets, QObject *
     auto callKeyDBus = new CallKeyDBus(accounts, secrets, parent);
     auto bus = QDBusConnection::sessionBus();
 
-    if (!bus.registerService("dev.rikudou.callkey")) {
+    if (!bus.registerService("cz.chrastecky.callkey")) {
         qWarning() << "Cannot register D-Bus service:" << bus.lastError().message();
         delete callKeyDBus;
         return nullptr;
     }
 
-    if (!bus.registerObject("/dev/rikudou/callkey", callKeyDBus, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
+    if (!bus.registerObject("/cz/chrastecky/callkey", callKeyDBus, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Cannot register D-Bus object:" << bus.lastError().message();
-        bus.unregisterService("dev.rikudou.callkey");
+        bus.unregisterService("cz.chrastecky.callkey");
         delete callKeyDBus;
         return nullptr;
     }

@@ -10,7 +10,7 @@
 class CallKeyDBus : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "dev.rikudou.callkey.v1")
+    Q_CLASSINFO("D-Bus Interface", "cz.chrastecky.callkey.v1")
 public:
     explicit CallKeyDBus(Accounts *accounts, SecretsHandler *secrets, QObject *parent = nullptr);
 
